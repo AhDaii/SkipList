@@ -45,8 +45,8 @@ public:
     bool insert(K k, V v);
     bool search(K k) const;
     bool del(K k);
-    bool dump_file(char* filename = "./db.txt") const;
-    bool load_file(char* filename = "./db.txt");
+    bool dump_file(const char* filename = "./db.txt") const;
+    bool load_file(const char* filename = "./db.txt");
 };
 
 template <typename K, typename V>
@@ -227,7 +227,7 @@ bool SkipList<K, V>::del(K k) {
 }
 
 template<typename K, typename V>
-bool SkipList<K, V>::dump_file(char *filename) const {
+bool SkipList<K, V>::dump_file(const char *filename) const {
     std::ofstream ofs(filename);
     if(!ofs.is_open()) {
         std::cout << "[DUMPFILE ERROR] the file " << filename << " open error!" << std::endl;
@@ -245,7 +245,7 @@ bool SkipList<K, V>::dump_file(char *filename) const {
 }
 
 template<typename K, typename V>
-bool SkipList<K, V>::load_file(char *filename) {
+bool SkipList<K, V>::load_file(const char *filename) {
     std::ifstream ifs(filename);
     if(!ifs.good()) {
         std::cout << "[LOADFILE ERROR] the file " << filename << " is not exist!" << std::endl;

@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.20)
 project(SkipList VERSION 0.1)
 
-set(CMAKE_CXX_STANDARD 17)
-add_compile_options(-O2)
+set(CMAKE_CXX_STANDARD 11)
+#add_compile_options(-O2)
 #include_directories("/opt/homebrew/Cellar/boost/1.76.0/include")
 
 find_package(Boost)

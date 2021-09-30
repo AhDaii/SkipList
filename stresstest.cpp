@@ -7,26 +7,31 @@
 #include <ctime>
 #include "SkipList.h"
 
-#define MAXN 1000000
+#define MAXN 1000
+
+inline int get_num() {
+    return rand() %  MAXN;
+}
 
 int main() {
     srand(time(NULL));
-    auto start = std::chrono::high_resolution_clock::now();
     SkipList<int, int> skipList(18);
+    auto start = std::chrono::high_resolution_clock::now();
     for(int i = 0; i < MAXN; ++ i) {
-        skipList.insert(rand(), rand());
+        skipList.insert(get_num(), get_num());
     }
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> use = end - start;
     std::cout << "Insert " << MAXN << " data use " << use.count() << "s" << std::endl;
-
     start = std::chrono::high_resolution_clock::now();
     for(int i = 0; i < MAXN; ++ i) {
-        skipList.search(rand());
+        skipList.search(get_num());
     }
     end = std::chrono::high_resolution_clock::now();
     use = end - start;
     std::cout << "Search " << MAXN << " data use " << use.count() << "s" << std::endl;
+
+    skipList.print();
     return 0;
 
 }
