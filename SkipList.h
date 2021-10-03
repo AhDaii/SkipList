@@ -175,6 +175,7 @@ SkipList<K, V>::~SkipList() {
         delete cur;
     }
     delete head;
+    head = nullptr;
 }
 
 template<typename K, typename V>
@@ -222,6 +223,7 @@ bool SkipList<K, V>::del(K k) {
         return false;
     }
     delete tmp;
+    tmp = nullptr;
     std::cout << "[INFO] Delete key " << k << " succeeded!" << std::endl;
     return true;
 }
