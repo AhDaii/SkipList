@@ -5,7 +5,7 @@
 #include <chrono>
 #include <cstdlib>
 #include <ctime>
-#include "SkipList.h"
+#include "include/SkipList.h"
 
 #define MAXN 1000
 

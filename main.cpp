@@ -1,4 +1,4 @@
-#include "SkipList.h"
+#include "include/SkipList.h"
 
 int main() {
     SkipList<int, std::string> s(10);
