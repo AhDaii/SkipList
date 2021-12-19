@@ -5,25 +5,25 @@
 #ifndef SKIPLIST_SKIPLIST_H
 #define SKIPLIST_SKIPLIST_H
 
-#include <iostream>
-#include <ctime>
-#include <climits>
-#include <fstream>
-#include <typeinfo>
-#include <string>
-#include <boost/lexical_cast.hpp>
 #include "Node.h"
+#include <boost/lexical_cast.hpp>
+#include <climits>
+#include <ctime>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <typeinfo>
 
-
-template<typename K, typename V>
+template <typename K, typename V>
 class SkipList {
 private:
-    Node<K, V> *head;
+    Node<K, V>* head;
     int max_level, cur_level;
 
     int random_level() const;
 
     static const char separator = ':';
+
 public:
     SkipList();
 
@@ -39,34 +39,33 @@ public:
 
     bool del(K k);
 
-    bool dump_file(const char *filename = "./db.txt") const;
+    bool dump_file(const char* filename = "./db.txt") const;
 
-    bool load_file(const char *filename = "./db.txt");
+    bool load_file(const char* filename = "./db.txt");
 };
 
-
-template<typename K, typename V>
-SkipList<K, V>::SkipList(): max_level(0), cur_level(0) {
+template <typename K, typename V>
+SkipList<K, V>::SkipList() : max_level(0), cur_level(0) {
     head = nullptr;
     srand(time(NULL));
 }
 
-template<typename K, typename V>
-SkipList<K, V>::SkipList(int m): max_level(m), cur_level(0) {
-    head = new Node<K, V>(K(), V(), max_level); // 给head申请max_level层，来使head可以访问到所有层
+template <typename K, typename V>
+SkipList<K, V>::SkipList(int m) : max_level(m), cur_level(0) {
+    head = new Node<K, V>(K(), V(), max_level);  // 给head申请max_level层，来使head可以访问到所有层
     srand(time(NULL));
 }
 
-template<typename K, typename V>
+template <typename K, typename V>
 void SkipList<K, V>::print() const {
-    if (head->level_next[0] == nullptr) { // 第0层就没数据，表明整个跳表是空的
+    if (head->level_next[0] == nullptr) {  // 第0层就没数据，表明整个跳表是空的
         std::cout << "Skip list is empty!" << std::endl;
         return;
     }
     std::cout << "===============SKIPLIST DATA===============" << std::endl;
     for (int i = cur_level; i >= 0; --i) {
         std::cout << "LEVEL " << i << " - ";
-        Node<K, V> *cur = head->level_next[i];
+        Node<K, V>* cur = head->level_next[i];
         while (cur != nullptr) {
             std::cout << '(' << cur->get_key() << ':' << cur->get_value() << ')' << ',';
             cur = cur->level_next[i];
@@ -76,12 +75,11 @@ void SkipList<K, V>::print() const {
     std::cout << "====================END====================" << std::endl;
 }
 
-template<typename K, typename V>
+template <typename K, typename V>
 bool SkipList<K, V>::insert(K k, V v) {
-
     // 1. 记录每一层小于k值的最大值的结点
-    Node<K, V> **record = new Node<K, V> *[max_level + 1];
-    Node<K, V> *cur = head;
+    Node<K, V>** record = new Node<K, V>*[max_level + 1];
+    Node<K, V>* cur = head;
     for (int i = cur_level; i >= 0; --i) {
         while (cur->level_next[i] != nullptr && cur->level_next[i]->get_key() < k) {
             cur = cur->level_next[i];
@@ -101,13 +99,13 @@ bool SkipList<K, V>::insert(K k, V v) {
     // 4.如果没有该数据，执行插入操作
     int r_level = random_level();
 
-    if (r_level > cur_level) { // 如果生成的随机层数比当前的要高, 就需要在record的更高层添加head，表示这一层将会有新的数据
+    if (r_level > cur_level) {  // 如果生成的随机层数比当前的要高, 就需要在record的更高层添加head，表示这一层将会有新的数据
         for (int i = cur_level + 1; i <= r_level; ++i)
             record[i] = head;
         cur_level = r_level;
     }
 
-    Node<K, V> *insert_node = new Node<K, V>(k, v, r_level);
+    Node<K, V>* insert_node = new Node<K, V>(k, v, r_level);
     for (int i = 0; i <= r_level; ++i) {
         insert_node->level_next[i] = record[i]->level_next[i];
         record[i]->level_next[i] = insert_node;
@@ -123,18 +121,18 @@ bool SkipList<K, V>::insert(K k, V v) {
  * 新插入的数据在第0层有50%的概率上升到上一层，上升后仍有50%的概率上升到上一层，
  * 可以通过生成随机数，判断奇偶来实现，因为一个随机数为奇偶的概率都为50%
  */
-template<typename K, typename V>
+template <typename K, typename V>
 int SkipList<K, V>::random_level() const {
     int level = 0;
     while (rand() & 1) {
         ++level;
     }
-    return level > max_level ? max_level : level;               // 防止生成的层数过高
+    return level > max_level ? max_level : level;  // 防止生成的层数过高
 }
 
-template<typename K, typename V>
+template <typename K, typename V>
 SkipList<K, V>::~SkipList() {
-    for (Node<K, V> *cur = head->level_next[0], *tmp; cur != nullptr; cur = tmp) {
+    for (Node<K, V>*cur = head->level_next[0], *tmp; cur != nullptr; cur = tmp) {
         tmp = cur->level_next[0];
         delete cur;
     }
@@ -142,17 +140,17 @@ SkipList<K, V>::~SkipList() {
     head = nullptr;
 }
 
-template<typename K, typename V>
+template <typename K, typename V>
 bool SkipList<K, V>::search(K k) const {
     if (head->level_next[0] == nullptr) {
         std::cout << "[INFO] Key " << k << " is not exist!" << std::endl;
         return false;
     }
-    Node<K, V> *cur = head;
+    Node<K, V>* cur = head;
     for (int i = cur_level; i >= 0; --i) {
         while (cur->level_next[i] != nullptr && cur->level_next[i]->get_key() <= k)
             cur = cur->level_next[i];
-        if (cur->get_key() == k) { // 在高层查找到就直接退出，不必往下继续查找
+        if (cur->get_key() == k) {  // 在高层查找到就直接退出，不必往下继续查找
             std::cout << "[INFO] Key " << k << " is exist!" << std::endl;
             return true;
         }
@@ -165,13 +163,13 @@ bool SkipList<K, V>::search(K k) const {
     return true;
 }
 
-template<typename K, typename V>
+template <typename K, typename V>
 bool SkipList<K, V>::del(K k) {
     bool find = false;
-    Node<K, V> *cur = head, *tmp, **test;
+    Node<K, V>*cur = head, *tmp, **test;
     int tmp_level = 0;
 
-    for (int i = cur_level; i >= 0; --i) { // 首先检测跳表中是否有这个数据
+    for (int i = cur_level; i >= 0; --i) {  // 首先检测跳表中是否有这个数据
         while (cur->level_next[i] != nullptr && cur->level_next[i]->get_key() < k)
             cur = cur->level_next[i];
         if (cur->level_next[i] != nullptr && cur->level_next[i]->get_key() == k) {
@@ -182,7 +180,7 @@ bool SkipList<K, V>::del(K k) {
         }
     }
 
-    if (!find) { // 如果没有这个键，直接退出
+    if (!find) {  // 如果没有这个键，直接退出
         std::cout << "[DELETE ERROR] Key " << k << " is not exist!" << std::endl;
         return false;
     }
@@ -192,15 +190,16 @@ bool SkipList<K, V>::del(K k) {
     return true;
 }
 
-template<typename K, typename V>
-bool SkipList<K, V>::dump_file(const char *filename) const {
+template <typename K, typename V>
+bool SkipList<K, V>::dump_file(const char* filename) const {
     std::ofstream ofs(filename);
     if (!ofs.is_open()) {
         std::cout << "[DUMPFILE ERROR] the file " << filename << " open error!" << std::endl;
         return false;
     }
-    ofs << typeid(K).name() << '\n' << typeid(V).name() << std::endl; // 保存键值对的类型
-    Node<K, V> *cur = head->level_next[0];
+    ofs << typeid(K).name() << '\n'
+        << typeid(V).name() << std::endl;  // 保存键值对的类型
+    Node<K, V>* cur = head->level_next[0];
     while (cur != nullptr) {
         ofs << cur->get_key() << separator << cur->get_value() << std::endl;
         cur = cur->level_next[0];
@@ -210,8 +209,8 @@ bool SkipList<K, V>::dump_file(const char *filename) const {
     return true;
 }
 
-template<typename K, typename V>
-bool SkipList<K, V>::load_file(const char *filename) {
+template <typename K, typename V>
+bool SkipList<K, V>::load_file(const char* filename) {
     std::ifstream ifs(filename);
     if (!ifs.good()) {
         std::cout << "[LOADFILE ERROR] the file " << filename << " is not exist!" << std::endl;
@@ -223,8 +222,8 @@ bool SkipList<K, V>::load_file(const char *filename) {
     getline(ifs, v_type);
     if (k_type != typeid(K).name() || v_type != typeid(V).name()) {
         std::cout
-                << "[LOADFILE ERROR] The data type of key or value in this file is different from that of the skip list!"
-                << std::endl;
+            << "[LOADFILE ERROR] The data type of key or value in this file is different from that of the skip list!"
+            << std::endl;
         return false;
     }
 
@@ -233,7 +232,7 @@ bool SkipList<K, V>::load_file(const char *filename) {
     V value;
     while (getline(ifs, str)) {
         std::size_t pos = str.find(separator);
-        if (pos == str.npos) { //没有找到分隔符，说明数据格式有问题，无法继续读取
+        if (pos == str.npos) {  //没有找到分隔符，说明数据格式有问题，无法继续读取
             std::cout << "[LOADFILE ERROR] Data in wrong format!" << std::endl;
             return false;
         }
@@ -246,4 +245,4 @@ bool SkipList<K, V>::load_file(const char *filename) {
     return true;
 }
 
-#endif //SKIPLIST_SKIPLIST_H
+#endif  // SKIPLIST_SKIPLIST_H
