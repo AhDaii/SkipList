@@ -1,0 +1,5 @@
+i
+NSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
+1:Hello
+3:World
+4:!
