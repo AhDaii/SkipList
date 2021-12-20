@@ -22,4 +22,14 @@ public:
     Task(callback f, void* arg);
 };
 
+class TaskQueue {
+private:
+    queue<Task> q;
+    mutex m;
+public:
+    void add_task(Task t);
+    void add_task(callback f, void* arg);
+    Task get_task();
+    int get_task_num();
+};
 #endif  // SKIPLIST_TASKQUEUE_H
