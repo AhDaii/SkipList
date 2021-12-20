@@ -2,8 +2,8 @@
 // Created by hunz1 on 2021/9/23.
 //
 
-#ifndef SKIPLIST_SKIPLIST_H
-#define SKIPLIST_SKIPLIST_H
+#ifndef __SKIPLIST_SKIPLIST_H__
+#define __SKIPLIST_SKIPLIST_H__
 
 #include "Node.h"
 #include <boost/lexical_cast.hpp>
@@ -245,4 +245,4 @@ bool SkipList<K, V>::load_file(const char* filename) {
     return true;
 }
 
-#endif  // SKIPLIST_SKIPLIST_H
+#endif  // __SKIPLIST_SKIPLIST_H__

@@ -2,8 +2,8 @@
 // Created by hunz1 on 2021/12/19.
 //
 
-#ifndef SKIPLIST_TASKQUEUE_H
-#define SKIPLIST_TASKQUEUE_H
+#ifndef __SKIPLIST_TASKQUEUE_H__
+#define __SKIPLIST_TASKQUEUE_H__
 
 #include <mutex>
 #include <queue>
@@ -20,16 +20,19 @@ private:
 public:
     Task();
     Task(callback f, void* arg);
+    void run();
+    ~Task();
 };
 
 class TaskQueue {
 private:
     queue<Task> q;
     mutex m;
+
 public:
     void add_task(Task t);
     void add_task(callback f, void* arg);
     Task get_task();
     int get_task_num();
 };
-#endif  // SKIPLIST_TASKQUEUE_H
+#endif  // __SKIPLIST_TASKQUEUE_H__

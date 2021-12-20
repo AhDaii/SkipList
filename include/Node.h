@@ -2,8 +2,8 @@
 // Created by hunz1 on 2021/12/19.
 //
 
-#ifndef SKIPLIST_NODE_H
-#define SKIPLIST_NODE_H
+#ifndef __SKIPLIST_NODE_H__
+#define __SKIPLIST_NODE_H__
 
 template <typename K, typename V>
 class Node {
@@ -60,4 +60,4 @@ void Node<K, V>::set_value(V v) {
     value = v;
 }
 
-#endif  // SKIPLIST_NODE_H
+#endif  // __SKIPLIST_NODE_H__
