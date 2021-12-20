@@ -21,7 +21,6 @@ public:
     Task();
     Task(callback f, void* arg);
     void run();
-    ~Task();
 };
 
 class TaskQueue {
