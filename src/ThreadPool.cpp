@@ -52,13 +52,12 @@ void ThreadPool::worker() {
         ++busy_num;
         task.run();
         --busy_num;
-
         cout << "thread \033[34m" << std::this_thread::get_id() << "\033[0m end working" << endl;
     }
 }
 
 void ThreadPool::thread_exit() {
-    --exit_num;
+    --busy_num;
     for (int i = 0; i < max_thread_num; ++i)
         if (worker_threads[i] != nullptr && worker_threads[i]->get_id() == std::this_thread::get_id()) {
             cout << "threadExit() function: thread "
