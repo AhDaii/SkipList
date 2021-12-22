@@ -38,10 +38,32 @@ string TcpSocket::recv_msg() {
     return ret;
 }
 
-void TcpSocket::send_msg(const string& str) {
+int TcpSocket::send_msg(string& str) {
+    char* buf = new char[str.size() + 4];
+    int sz = htonl(str.size());
+
+    memcpy(buf, &sz, 4);
+    memcpy(buf + 4, str.data(), str.size());
+
+    int ret = write_n(buf, str.size() + 4);
+    delete[] buf;
+    return ret;
 }
 
-int TcpSocket::write_n(const char* str, int len) {
+int TcpSocket::write_n(char* str, int len) {
+    int write_num = 0, left = len;
+    char* p = str;
+    while (left > 0) {  // 一次可能写不完
+        if ((write_num = write(m_fd, str, left)) > 0) {
+            p += write_num;
+            left -= write_num;
+        }
+        else {
+            perror("write error");
+            return -1;
+        }
+    }
+    return len;
 }
 
 int TcpSocket::read_n(char* str, int len) {

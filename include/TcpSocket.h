@@ -2,6 +2,7 @@
 #define __TCPSOCKET_H__
 
 #include <arpa/inet.h>
+#include <cstring>
 #include <memory>
 #include <string>
 #include <unistd.h>
@@ -12,7 +13,7 @@ class TcpSocket {
 private:
     int m_fd;
     int read_n(char* str, int len);
-    int write_n(const char* str, int len);
+    int write_n(char* str, int len);
 
 public:
     TcpSocket();
@@ -28,7 +29,7 @@ public:
     int connect_to_host(string ip, unsigned short port);
 
     // send_msg和recv_msg用于解决沾包问题
-    void send_msg(const string& msg);
+    int send_msg(string& msg);
     string recv_msg();
 };
 
