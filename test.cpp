@@ -12,7 +12,7 @@ void taskFunc(void* arg) {
 int main() {
     ThreadPool* thread_pool = new ThreadPool(2, 10);
     int* num = nullptr;
-    for (int i = 0; i < 100; ++i) {
+    for (int i = 0; i < 101; ++i) {
         num = new int(i + 100);
         thread_pool->add_task(Task(taskFunc, num));
     }
